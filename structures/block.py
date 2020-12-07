@@ -18,8 +18,8 @@ class Block:
         for index, record in enumerate(self.records):
             if col_check_type == "int":
                 record.getValues()[col_to_check] = int(record.getValues()[col_to_check])
-                if operate(record.getValues()[col_to_check], operator, value):
-                    del self.records[index]
+            if operate(record.getValues()[col_to_check], operator, value):
+                del self.records[index]
 
 
 
