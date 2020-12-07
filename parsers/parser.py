@@ -1,10 +1,10 @@
-import select_parser as sp
-import create_db_parser as cdp
-import create_table_parser as ctp
-import delete_parser as dp
-import insert_parser as itp
-import update_parser as utp
-import use_db_parser as udp
+import parsers.select_parser as sp
+import parsers.create_db_parser as cdp
+import parsers.create_table_parser as ctp
+import parsers.delete_parser as dp
+import parsers.insert_parser as itp
+import parsers.update_parser as utp
+import parsers.use_db_parser as udp
 
 
 # returns result of the statement  being parsed

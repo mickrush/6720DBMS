@@ -1,7 +1,8 @@
 import os 
-import create_table_parser
-#DATABASE CREATION
-##def Create Path()
+import parsers.parser as parser
+from structures.block import  Block
+from structures.file import File
+import pickle
 
 
 def MakeDB(path,dbname):
@@ -31,10 +32,16 @@ def MakeDB(path,dbname):
 
 def CreateTable(path,statement):
 
-    dict = create_table_parser.parse(statement)
+    dict = parser.parse(statement)
     if dict != False:
             table_name = dict["table"]
-            values = dict["values"]
-            f = open(path + "/" + table_name,"ab")
+            columns = dict["values"]
+            f = open(path + "/" + table_name,"wb")
             print("Table created %s "%path)
+            file = File(columns)
+            file.addBlock(Block())
+            file.addBlock(Block())
+            file.addBlock(Block())
+            pickle.dump(file, f)
             
+CreateTable("/Users/chanderpaulmartin/Desktop", "create table users (id int, fname string, lname string)")
