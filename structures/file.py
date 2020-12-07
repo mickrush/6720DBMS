@@ -11,5 +11,8 @@ class File:
 
     def getBlocks(self):
         return self.blocks
+        
+    def getColumns(self):
+        return self.columns
 
     

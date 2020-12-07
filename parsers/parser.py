@@ -48,7 +48,8 @@ def checkStatement(statement):
     return "INVALID"
 
 
-# print("Select result: ", parse("select name from users"))
+
+# print("Select result: ", parse("select id, fname, lname, user from users"))
 # print("Create table result: ", parse(
 #     "create table users (id int, fname string, lname string)"))
 # print("Insert result: ", parse("insert into users values (1, 'John', 'Brown')"))

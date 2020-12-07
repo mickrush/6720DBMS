@@ -7,7 +7,6 @@ import pickle
 
 def MakeDB(path,dbname):
 #Use paths below based on operating system in os.chdir function
-
 ##Mac OS X: /Users/username/Desktop.
 ##Windows: C:/Users/username/Desktop.
 ##Linux: /home/username/Desktop.
@@ -29,7 +28,6 @@ def MakeDB(path,dbname):
 #TABLE CREATION
 ##make binary file
 ## check if false
-
 def CreateTable(path,statement):
 
     dict = parser.parse(statement)

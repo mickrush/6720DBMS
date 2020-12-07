@@ -6,6 +6,9 @@ print(f)
 file = pickle.load(f)
 
 print(file.columns)
-print(file.getBlocks())
+
+for block in file.getBlocks():
+    for record in block.getRecords():
+        print (record.getValues())
 
 f.close()

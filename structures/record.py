@@ -1,12 +1,11 @@
 class Record:
 
-    def __init__(self):
-
-        self.values = []
-
-
-    def add(self):
-        pass
+    def __init__(self, param1, param2, param3):
+        self.values = [param1, param2, param3]
     
-    def update(self):
-        pass
+    
+    def getValues(self):
+        return self.values
+
+    def update(self, col_number, value):
+        self.values[col_number] = value
