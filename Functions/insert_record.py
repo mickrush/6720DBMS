@@ -33,4 +33,4 @@ def insertRecord(statement):
     return added
 
 
-insertRecord("insert into users values (1, 'John', 'Brown')")
+insertRecord("insert into users values (3, 'John', 'Brown')")

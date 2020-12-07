@@ -5,20 +5,15 @@ from structures.file import File
 import pickle
 
 
-def MakeDB(path,dbname):
+def MakeDB(path, statement):
 #Use paths below based on operating system in os.chdir function
 ##Mac OS X: /Users/username/Desktop.
 ##Windows: C:/Users/username/Desktop.
 ##Linux: /home/username/Desktop.
-
 ##    os.chdir('Users/Bradley/Desktop')
-
-    os.chdir(path)
-    
-    dbname = dbname
-
+    db = parser.parse(statement)
     try:
-        os.mkdir(dbname)
+        os.mkdir(path + "/"+ db)
     except OSError:
         print ("Creation of the directory %s failed" % path)
     else:
@@ -42,4 +37,6 @@ def CreateTable(path,statement):
             file.addBlock(Block())
             pickle.dump(file, f)
             
-CreateTable("/Users/chanderpaulmartin/Desktop", "create table users (id int, fname string, lname string)")
+# CreateTable("/Users/chanderpaulmartin/Desktop", "create table users (id int, fname string, lname string)")
+
+MakeDB("/Users/chanderpaulmartin/Desktop", "create shop")

@@ -40,11 +40,13 @@ def deleteRecords(statement):
                 block.deleteRecord(col_to_check,wc[1], wc[2], col_check_type)
                 
             print(block.getRecords())
+            for record in  block.getRecords():
+                print(record.getValues())
 
     return res != False
 
 
-deleteRecords("delete from users where id = 1")
+deleteRecords("delete from users where id = 3")
 
     
 
