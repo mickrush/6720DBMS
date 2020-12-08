@@ -18,25 +18,30 @@ def MakeDB(path, statement):
         print ("Creation of the directory %s failed" % path)
     else:
         print ("Successfully created the directory %s " % path)
-        return path 
+        return db
+    return False
 
 #TABLE CREATION
 ##make binary file
 ## check if false
-def CreateTable(path,statement):
-
-    dict = parser.parse(statement)
-    if dict != False:
-            table_name = dict["table"]
-            columns = dict["values"]
-            f = open(path + "/" + table_name,"wb")
-            print("Table created %s "%path)
+def CreateTable(db,table_name, columns):
+    #dict = parser.parse(statement)
+    #check if file exist
+    if db == "":
+        return False
+    if not os.path.exists(db+"/"+table_name):
+        try:
+            f = open(db + "/" + table_name,"wb")
             file = File(columns)
             file.addBlock(Block())
             file.addBlock(Block())
             file.addBlock(Block())
             pickle.dump(file, f)
+            return True
+        except FileNotFoundError:
+            return False
+    return False
             
 # CreateTable("/Users/chanderpaulmartin/Desktop", "create table users (id int, fname string, lname string)")
 
-MakeDB("/Users/chanderpaulmartin/Desktop", "create shop")
+# MakeDB("/Users/chanderpaulmartin/Desktop", "create shop")

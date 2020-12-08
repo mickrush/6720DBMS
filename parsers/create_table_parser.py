@@ -28,8 +28,8 @@ def isValidStatement(statement):
 def parse(statement):
     if isValidStatement(statement):
        table_name = getTable(statement)
-       values = getValues(statement)
-       return {"table": table_name, "values": values}
+       columns = getColumns(statement)
+       return {"table": table_name, "columns": columns}
     # if the statement is not a valid statement then the parse method will return false
     return False
 
@@ -40,8 +40,8 @@ def getTable(statement):
     return words[2]
 
 
-# gets the values to be inserted into the table
-def getValues(statement):
+# gets the columns 
+def getColumns(statement):
     # find the start of the values
    values_start = statement.find("(")
    # get values

@@ -36,10 +36,14 @@ class GUI(object):
         commit_btn.config(font=('Courier', 25))
 
     def executeHandler(self):
+        self.result_input.delete("1.0", "end")
         sql = self.sql_input.get()
+        print("execute handler clicked")
         self.conn.sendall(sql.encode())
-        # if sql != "":
-        #     self.result_input.insert('1.0', sql)
+    
+        msg = self.conn.recv(1024).decode()
+        if msg != "":
+            self.result_input.insert('1.0', msg)
         # else:
         #     messagebox.showinfo(
         #         "No SQL", "Please enter a valid sql statement", icon='info')

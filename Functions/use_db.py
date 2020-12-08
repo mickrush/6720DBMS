@@ -1,13 +1,9 @@
 import os 
-import parsers.parser as parser
 
-
-def use_db(path, statement):
-    db = parser.parse(statement)
-    if db != False:
-        if os.path.exists(path+"/"+db):
-            os.chdir(path+"/"+db)
-            return True      
+def use_db(path, db):
+    if os.path.exists(path+"/"+db):
+        os.chdir(path+"/"+db)
+        return  path+"/"+db    
     return False
 
-print(use_db("/Users/chanderpaulmartin/desktop", "use te"))
+# print(use_db("/Users/chanderpaulmartin/desktop", "use te"))
