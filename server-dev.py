@@ -8,6 +8,7 @@ import parsers.parser as parser
 import Functions.DbCreation as dbc
 import Functions.use_db as udb
 import Functions.insert_record as isr
+import Functions.select_records as sltr
 import pickle
 
 
@@ -88,7 +89,6 @@ def main():
                         inserted = False
                         if table_name in current_session:
                             inserted = isr.insertRecord(current_database, values, current_session[table_name])
-                            print(current_session)
                         else:
                             try:
                                 table = open(current_database+"/"+table_name, "rb")
@@ -98,16 +98,45 @@ def main():
                                 table.close()
                             except FileNotFoundError:
                                 conn.sendall("Could not insert record".encode())
-
+                                continue
+                            except:
+                                conn.sendall("Could not insert record".encode())
+                                continue
                         if inserted:
-
-                            conn.sendall("Inserted record".encode())
-                            for block in (current_session[table_name]).getBlocks():
-                                print(block.getRecords())
+                            conn.sendall("Inserted record".encode())    
                         else:
                             conn.sendall("Could not insert record".encode())
                     else:
                         conn.sendall("Could not insert record".encode())
+                
+                # select records
+                if checkStatement(statement) == "SELECT":
+                    res = parser.parse(statement)
+                    if res != False:
+                        columns = res["columns"]
+                        table_name = res["table"]
+                        wc = res["where_condition"]
+                        sel_res = ""
+                        if table_name in current_session:
+                            sel_res = sltr.selectRecords(current_database, columns, wc, current_session[table_name]) 
+                        else:
+                            try:
+                                table = open(current_database+"/"+table_name, "rb")
+                                current_session[table_name] = pickle.load(table)
+                                sel_res = sltr.selectRecords(current_database, columns, wc, current_session[table_name])
+                                table.close()
+                            except FileNotFoundError:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                            except:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                        if sel_res != "":
+                            conn.sendall(sel_res.encode())
+                        else:
+                            conn.sendall("There are no records".encode())
+                    else:
+                        conn.sendall("Could not get records".encode())
 
 
 def checkStatement(statement):

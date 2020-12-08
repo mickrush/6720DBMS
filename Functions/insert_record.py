@@ -1,5 +1,4 @@
 import os 
-import parsers.parser as parser
 from structures.block import  Block
 from structures.file import File
 from structures.record import Record
@@ -7,7 +6,6 @@ import pickle
 
 
 def insertRecord(db, values, file_obj):
-    # res = parser.parse(statement)
     if db == "":
         return False
     added = False   
