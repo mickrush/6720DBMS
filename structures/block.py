@@ -35,8 +35,10 @@ def operate(value1, operator, value2):
         return value1 == value2
     if operator == "!=":
         return value1 != value2
+        
     if operator == ">":
-        return value1 < value2
+        return value1 > value2
+
     if operator == "<":
         return value1 < value2
 
