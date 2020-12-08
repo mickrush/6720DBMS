@@ -9,6 +9,8 @@ import Functions.DbCreation as dbc
 import Functions.use_db as udb
 import Functions.insert_record as isr
 import Functions.select_records as sltr
+import Functions.update_records as udpr
+import Functions.delete_records as dltr
 import pickle
 
 
@@ -65,7 +67,7 @@ def main():
                         else:
                             conn.sendall("Could not change to database".encode())
                     else:
-                        conn.sendall("Could not change to database".encode())
+                        conn.sendall("Invalid use database statement".encode())
 
                 # create table
                 if checkStatement(statement) == "CREATE_TABLE":
@@ -78,7 +80,7 @@ def main():
                         else:
                             conn.sendall("Could not create table".encode())
                     else:
-                        conn.sendall("Could not create table".encode())
+                        conn.sendall("Invalid create table statement".encode())
                         
                 # insert into table
                 if checkStatement(statement) == "INSERT":
@@ -97,17 +99,17 @@ def main():
                                 print(current_session)
                                 table.close()
                             except FileNotFoundError:
-                                conn.sendall("Could not insert record".encode())
+                                conn.sendall("Table does not exist".encode())
                                 continue
                             except:
-                                conn.sendall("Could not insert record".encode())
+                                conn.sendall("Table does not exist".encode())
                                 continue
                         if inserted:
                             conn.sendall("Inserted record".encode())    
                         else:
                             conn.sendall("Could not insert record".encode())
                     else:
-                        conn.sendall("Could not insert record".encode())
+                        conn.sendall("Invalid insert statement".encode())
                 
                 # select records
                 if checkStatement(statement) == "SELECT":
@@ -136,8 +138,66 @@ def main():
                         else:
                             conn.sendall("There are no records".encode())
                     else:
-                        conn.sendall("Could not get records".encode())
+                        conn.sendall("Invalid select statement".encode())
 
+                # update records
+                if checkStatement(statement) == "UPDATE":
+                    res = parser.parse(statement)
+                    if res != False:
+                        table_name = res["table"]
+                        sc = res["set_clause"]
+                        wc = res["where_condition"]
+                        if table_name in current_session:
+                            upd_res = udpr.updateRecords(current_database, sc, wc, current_session[table_name]) 
+                        else:
+                            try:
+                                table = open(current_database+"/"+table_name, "rb")
+                                current_session[table_name] = pickle.load(table)
+                                upd_res = udpr.updateRecords(current_database, sc, wc, current_session[table_name])
+                                table.close()
+                            except FileNotFoundError:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                            except:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                        if upd_res:
+                            conn.sendall("Updated tables".encode())
+                        else:
+                            conn.sendall("No update".encode())                    
+                    else:
+                        conn.sendall("Invalid update statement".encode())
+
+                # delete records
+                if checkStatement(statement) == "DELETE":
+                    res = parser.parse(statement)
+                    if res != False:
+                        table_name = res["table"]
+                        wc = res["where_condition"]
+                        if table_name in current_session:
+                            upd_res = dltr.deleteRecords(current_database, wc, current_session[table_name]) 
+                        else:
+                            try:
+                                table = open(current_database+"/"+table_name, "rb")
+                                current_session[table_name] = pickle.load(table)
+                                upd_res = dltr.deleteRecords(current_database, wc, current_session[table_name])
+                                table.close()
+                            except FileNotFoundError:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                            except:
+                                conn.sendall("Table does not exist".encode())
+                                continue
+                        if upd_res:
+                            conn.sendall("Deleted record(s)".encode())
+                        else:
+                            conn.sendall("No delete".encode())                    
+                    else:
+                        conn.sendall("Invalid delete statement".encode())
+
+                # any statement that's not one of the supported statements
+                if checkStatement(statement) == "INVALID":
+                    conn.sendall("Not a valid statement".encode())
 
 def checkStatement(statement):
     ls = statement.lower()
