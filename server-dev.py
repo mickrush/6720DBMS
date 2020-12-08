@@ -7,11 +7,14 @@ import sys
 import parsers.parser as parser
 import Functions.DbCreation as dbc
 import Functions.use_db as udb
+import Functions.insert_record as isr
+import pickle
 
 
 
 def main():
     current_database = ""
+    current_session = {}
     args = sys.argv
     HOST = '127.0.0.1'
     PORT = 5879
@@ -28,6 +31,16 @@ def main():
                 statement = conn.recv(1024).decode()
                 if not statement:
                     conn.close()
+
+                # save changes to database
+                if statement.lower() == "commit":
+                    if current_database != "":
+                        for key in current_session:
+                            table = open(current_database + "/" + key, "wb")
+                            pickle.dump(current_session[key], table)
+                        conn.sendall("Changes saved to database".encode())
+                    else:
+                        conn.sendall("No database selected".encode())
                 
                 # create database
                 if checkStatement(statement) == "CREATE_DB":
@@ -66,7 +79,35 @@ def main():
                     else:
                         conn.sendall("Could not create table".encode())
                         
+                # insert into table
+                if checkStatement(statement) == "INSERT":
+                    res = parser.parse(statement)
+                    if res != False:
+                        table_name = res["table"]
+                        values = res["values"]
+                        inserted = False
+                        if table_name in current_session:
+                            inserted = isr.insertRecord(current_database, values, current_session[table_name])
+                            print(current_session)
+                        else:
+                            try:
+                                table = open(current_database+"/"+table_name, "rb")
+                                current_session[table_name] = pickle.load(table)
+                                inserted = isr.insertRecord(current_database, values, current_session[table_name])
+                                print(current_session)
+                                table.close()
+                            except FileNotFoundError:
+                                conn.sendall("Could not insert record".encode())
 
+                        if inserted:
+
+                            conn.sendall("Inserted record".encode())
+                            for block in (current_session[table_name]).getBlocks():
+                                print(block.getRecords())
+                        else:
+                            conn.sendall("Could not insert record".encode())
+                    else:
+                        conn.sendall("Could not insert record".encode())
 
 
 def checkStatement(statement):

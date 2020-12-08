@@ -49,7 +49,12 @@ class GUI(object):
         #         "No SQL", "Please enter a valid sql statement", icon='info')
 
     def commitHandler(self):
-        pass
+        self.result_input.delete("1.0", "end")
+        self.conn.sendall("commit".encode())
+
+        msg = self.conn.recv(1024).decode()
+        if msg != "":
+            self.result_input.insert('1.0', msg)
 
 
 def main():
