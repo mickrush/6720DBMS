@@ -12,7 +12,7 @@ def buildRegExp():
     # capture set clause
     setre = "[sS][eE][tT]\s+([a-zA-Z]+\s+=\s+('[a-zA-Z]+'|\d+))"
     # capture where clause
-    wherere = "([wW][hH][eE][rR][eE]\s+[a-zA-Z]+\s+(<|>|=|!=)\s+([a-zA-Z]+|\d+))"
+    wherere = "([wW][hH][eE][rR][eE]\s+[a-zA-Z]+\s+(<|>|=|!=)\s+('[a-zA-Z]+'|\d+))"
     return "{}\s+{}\s+{}\s+{}\s*$".format(updatere, tablere, setre, wherere)
 
 

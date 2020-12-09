@@ -10,7 +10,7 @@ def buildRegExp():
     # capture from clause
     fromre = "([fF][rR][oO][mM]\s+[a-zA-Z]+)"
     # capture where clause
-    wherere = "([wW][hH][eE][rR][eE]\s+[a-zA-Z]+\s+(<|>|=|!=)\s+([a-zA-Z]+|\d+))"
+    wherere = "([wW][hH][eE][rR][eE]\s+[a-zA-Z]+\s+(<|>|=|!=)\s+('[a-zA-Z]+'|\d+))"
     return "{}\s+{}\s+{}\s*$".format(deletere, fromre, wherere)
 
 

@@ -14,7 +14,7 @@ def buildRegExp():
     # capture table name
     tablere = "[a-zA-Z]+"
     # capture where clause
-    wherere = "((\s+((where)\s+[a-zA-Z]+\s+(<|>|=|!=)\s+([a-zA-Z]+|\d+)))??)"
+    wherere = "((\s+((where)\s+[a-zA-Z]+\s+(<|>|=|!=)\s+('[a-zA-Z]+'|\d+)))??)"
     # builds select statement pattern
     return "{}\s+{}\s+{}\s+{}{}\s*$".format(selectre, columnsre, fromre, tablere, wherere)
 
